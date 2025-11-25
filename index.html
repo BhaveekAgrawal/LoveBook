@@ -28,8 +28,9 @@
 
     .book-container {
         position: relative;
-        width: 1080px;
-        height: 1358px;
+        width: 90vw;                /* scale to viewport width */
+        max-width: 1080px;          /* never exceed original size */
+        aspect-ratio: 1080 / 1358;  /* maintain the correct shape */
     }
 
     img.book {
@@ -41,10 +42,10 @@
     /* Page Counter */
     .page-counter {
         position: absolute;
-        top: 95px;
-        right: 150px;
+        top: 7%;
+        right: 12%;
         font-family: 'Minecraft', sans-serif;
-        font-size: 40px;
+        font-size: min(4vw, 32px);
         font-weight: bold;
         word-spacing: 8px;
         letter-spacing: 2px;
@@ -57,17 +58,17 @@
     /* Page Text Area */
     .page-text {
         position: absolute;
-        top: 200px;
-        left: 150px;
-        width: calc(100% - 300px);
-        height: calc(100% - 400px);
+        top: 15%;
+        left: 12%;
+        width: 76%;
+        height: 70%;
         font-family: "Minecraft", sans-serif;
-        font-size: 36px;
+        font-size: min(4vw, 36px);
         word-spacing: 10px;
         letter-spacing: 2px;
         color: #000;
         text-shadow: 2px 2px 0 #9290909f;
-        line-height: 52px;
+        line-height: 1.35;
         white-space: pre-wrap;
         overflow-wrap: break-word;
         pointer-events: none;
@@ -76,8 +77,8 @@
     /* Buttons */
     .btn {
         position: absolute;
-        width: 115px;
-        height: 115px;
+        width: min(12vw, 115px);
+        height: min(12vw, 115px);
         cursor: pointer;
         background-size: contain;
         background-repeat: no-repeat;
@@ -91,8 +92,8 @@
     }
 
     .btn-left {
-        bottom: 100px;
-        left: 140px;
+        bottom: 8%;
+        left: 12%;
         background-image: url('UI/bt_left.png');
     }
     .btn-left:hover {
@@ -100,8 +101,8 @@
     }
 
     .btn-right {
-        bottom: 100px;
-        right: 140px;
+        bottom: 8%;
+        right: 12%;
         background-image: url('UI/bt_right.png');
     }
     .btn-right:hover {
