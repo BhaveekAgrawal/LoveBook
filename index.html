@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Book</title>
+
+<style>
+    @font-face {
+        font-family: 'Minecraft';
+        src: url('UI/Minecraft.ttf') format('truetype');
+    }
+
+    * {
+        -webkit-font-smoothing: none;
+        font-smooth: never;
+        image-rendering: pixelated;
+    }
+
+    body {
+        margin: 0;
+        background: #000;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .book-container {
+        position: relative;
+        width: 1080px;
+        height: 1358px;
+    }
+
+    img.book {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    /* Page Counter */
+    .page-counter {
+        position: absolute;
+        top: 95px;
+        right: 150px;
+        font-family: 'Minecraft', sans-serif;
+        font-size: 40px;
+        font-weight: bold;
+        word-spacing: 8px;
+        letter-spacing: 2px;
+        color: #3a2c16;
+        text-shadow: 3px 3px 0 #f0e3b6;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    /* Page Text Area */
+    .page-text {
+        position: absolute;
+        top: 200px;
+        left: 150px;
+        width: calc(100% - 300px);
+        height: calc(100% - 400px);
+        font-family: "Minecraft", sans-serif;
+        font-size: 36px;
+        word-spacing: 10px;
+        letter-spacing: 2px;
+        color: #000;
+        text-shadow: 2px 2px 0 #9290909f;
+        line-height: 52px;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        pointer-events: none;
+    }
+
+    /* Buttons */
+    .btn {
+        position: absolute;
+        width: 115px;
+        height: 115px;
+        cursor: pointer;
+        background-size: contain;
+        background-repeat: no-repeat;
+        opacity: 1;
+        transition: opacity 0.15s;
+    }
+
+    .btn.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+    }
+
+    .btn-left {
+        bottom: 100px;
+        left: 140px;
+        background-image: url('UI/bt_left.png');
+    }
+    .btn-left:hover {
+        background-image: url('UI/bt_left_hl.png');
+    }
+
+    .btn-right {
+        bottom: 100px;
+        right: 140px;
+        background-image: url('UI/bt_right.png');
+    }
+    .btn-right:hover {
+        background-image: url('UI/bt_right_hl.png');
+    }
+
+    /* Disable hover effects on touch devices */
+    @media (hover: none) and (pointer: coarse) {
+        .btn-left:hover { background-image: url('UI/bt_left.png'); }
+        .btn-right:hover { background-image: url('UI/bt_right.png'); }
+    }
+
+    /* Page turn animation */
+    .page-flip {
+        animation: flip 0.25s ease-out;
+    }
+    @keyframes flip {
+        0% { opacity: 0.3; transform: scale(0.98); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+</style>
+
+</head>
+<body>
+
+<div class="book-container">
+    <img class="book" src="UI/Book.png">
+
+    <div id="pageCounter" class="page-counter"></div>
+
+    <div id="pageText" class="page-text"></div>
+
+    <div id="btnLeft" class="btn btn-left" onclick="prevPage()"></div>
+    <div id="btnRight" class="btn btn-right" onclick="nextPage()"></div>
+</div>
+
+<script>
+    const pages = [
+        "OMGGGG HAIIII MY BABYYYYYYYYYYYYYYYYYYYYYYYYYY I LOVE YOU SOOO MUCH OMG I SERIOUSLY AM SO HAPPY ITS BEEN A WHOLE A FULLLLLLLLLLLLL YEAR WE'VE BEEN TOGETHER THIS IS SO CRAZY OMGOGOMGMOG HEHEHEHEHE I LOVE YOU SO MUCH MY PRETTY BABY I LOVE LOVE LOVE LOVE YOU YOURE SO CUTU AND SO KUCHU PUCHU I LOVE YOU I LOVE EVERYTHING ABOUT YOU OMG LIKE SERIOUSLY OMG I DIDN'T THINK I WOULD EVER GET A GIRLFRIEND AND HERE I AM WITH YOU ON OUR 1 YEAR ANNIVERSARY HEHEHEHEHEE THIS IS SO AMAZING BABY HEHEHE ive learnt so many things about you,",
+        "and i have soooo many precious memories with you and im gonna keep them with me forever i love you so much, i know the week didn't go so well because of my mistakes im really sorry okay i promise im not gonna turn this into some sad sad thing we're supposed to be happy today I LOVE YOU SO MUCH, I GOT THIS AMAZING IDEA TO NOT ONLY WRITE YOU A PARAGRAPH BUT LIKE A SMALL BOOK PRETTY MUCH EHEHEHEH so omg let me tell you, basically i was brainstorming ideas and ananya texted me i asked her is it possible to top a 6 or 7 ( SIX SEVENNNN ) page love letter thing and obv she didn't know and im here",
+        "tryna figure out something right and im like IM GONNA WRITE HER A BOOK AND YEAH IM LIKE OMG MINECRAFT BOOK ( i got the Minecraft book part while pooping HEHEHEHEHE ) and oh my god ive been trying so hard to make this for some reason it just did not want to work I LOVE YOU SO MUCH BABY I LOVE YOU IM GONNA KEEP YOU FOREVER IM GONNA EAT YOU SO WE BECOME ONE AND AND WE CAN DO EVERYTHING TOGETHER THEN YAYAYAYAYAYAYAY I LOVE YOU SO MUCH BABY omg, i do have a big surprise planned out for you I JUST HOPE EVERYTHING GOES ACCORDING TO PLAN HEHEHE",
+        "ONE WHOLE YEAR YAAYYAYAYAYAYAYYAYA I LOVE YOU, so many many hard times, meanie times, sad times, alot of happy times, literally soooo much we've through together like woah ive showed you so many sides of me and so have you its so amazing i miss the times  when like noddy had perfume on  him i used to love smelling it and sleeping next to him it always reminded me of you and all the memories we had it was so nice and the first month of us being together ?!!? i was so shy and so were you whenever i called you cute, eheh spending time with you is always so fun talking to you about random",
+        "things, looking at youre amazing and beautiful face lowk drowning in your eyes they are so beautiful, looking at our photos zooming into you kissing and tweaking out over my phone when i see you in them missing you like crazy being really sad when i miss you and being so happy whenever youre around youre  so amazing you make me feel so many amazing things, i love making you smile and be happy i love watching you laugh, sneeze, be confused, be autistic i love it all  i feel so happy and relaxed being near you i wish i was able to keep you in my room and spend infinite amount of time with you im gonna marry you and",
+        "make you mine and watch everyone else be jealous that i have you im gonna flex ''MY WIFEEEE'' on everyone they can never have anyone as amazing as you i love you so much and i miss you right now i miss you so very much i wish we were with eachother cuddling and getting closer :D i wish we could skip forward and just be together i wish we could stop time and spend an eternity learning every single thing about eachother growing so close nothing can ever come between us learning so many things and spending so much time together [ i would short circuit your sleeping pod on a spaceship after waking up from my",
+        "own and tell you it malfunctioned and spend my final time with you falling in love all over again but youre not nerdy enough to understand :3 ] i love you baby i love love love love you so much i just wanna be with you and do nothing else and kiss you i love your eyes, your name, your hair, your lips, your heart, your love, your thinking, your cuteness, your beautiful and amazing body, your touch, your kindness, your forgiveness, your two vampire teeths, your neck, your hands, the warmth of your left butt, your shine, your scent, your clothes, your kisses, the little things you do, the way you always look at me, the",
+        "way you laugh, the way you jump around, the things you like i love you sooooo much. i remember the times when you kept telling me you looked like lord farquad and i always told you, you looked super pretty :sob: i miss you babyyyy and i can't wait for our anniversary hehehe im so excited for every gift you get me and its so worth it i love every single thing you've given me i miss you so much tooo wait i already said that BUT STILL I MISS YOU I WANNA SEE YOU RIGHT NOW RAHHHHHHHHHHHH everyday is so fun and i cant wait for the BIG DAY EHEHEHEHEH I LOVE YOU BABY I WANNA TELEPORT TO YOU AND",
+        "GIVE YOU ALOT OF KISSES AND HIDE IN YOUR ROOMA AND CUDDLE ALL NIGHT ID LIVE ON 3 BITES OF ROTIS AND RANDOM FOOD FOR YOU IF YOU HID ME IN YOUR HOUSE ID BE FINE WITH ANYTHING RAHHH I WANNA COME SEE YOU RIGHT NOW I WANNA SPEND TIME WITH YOU AND SING ALOT OF SONGS WITH YOU AND JUST LIKE DO CRAZY STUF, I LOVE YOU SO MUCH BABY I LOVE YOU I LOVE YOU I LOVE YOU SO MUCH OMG LIKE MAKING THIS HAS BEEN SO MUCH FUN AND I GET TO WRITE FOR YOU IN A LITREAL MINECRAFT BOOK EHHEHEHEHE OMG AND LIKE I KNOW YOU LIKE MINECRAFT TOO SO THIS IS LIKE",
+        "LITREALLY PERFECT YAYAY i love you so much my baby i wanna kis syou so much i wanna tickle you and kiss your neck and blow air in your ear and kuchi kuchi you and tweak out and touch you all over and give you BIIIIIG TIGHT HUGS AND LOVE YOU FOREVER BE MY WIFE PLEASE I LOVE YOU SO MUCH DID I MENTION HOW MUCH I LOVE YOU EHEHEHHEHEHE I SAID SO MANY I LOVE YOUS BUT THEY ARENT ENOUGH I WANNA GIVE YOU MORE I WANNA TURN THIS INTO A QR CODE AND MAKE IT INTO A CUTE LITTLE BOOK FOR YOU TO OPEN AND SCAN SO YOU CAN OPEN IT ANYTIME AND FEEL CUTE ABOUT IT AND CARRY",
+        "IT AROUND AND STUFF HEHEHEHEH wATCHING SHOWS WITH YOU AND WATCHING ANIME WITH YOU AND YOUTUBE AND LISTENING TO SONG IS SO FUN EVERYTHING IS SO FUN WITH YOU ITS SO AMAZING MY BABY I WANNA TRAVEL THE WORLD WITH YOU AND GO TO JAPAN AND BALI AND PARIS AND ALL THESE AMAZING PLACES HOLDING YOUR HAND AND KISSING YOU AND STUFF I LOVE YOU SO OAIUSGDUIOAYGDUYAGSDYUAGSBDYUASGFDUYASFGDTASFGDTYAFSUIDGFIUHSYDUGASYUDGCASYUDFGASYUDGADUIGAS IM TWAEKING OUT WRITING THIS AMOUNT OF LOVE BUBBLES AND EVERYTHING HEHEHEHEHEHEH",
+        "AYYAYAYAYAYAYAYYAAYYA YOURE SO AMAZING AND YOURE ALL MINE LIKE??? AIDJWWAOHHHHHHHHHHHHHHHHHH YOURE MINE HEHEHHEH MY CUTU BABY IVE HAD YOU FOR A WHOLE YEAR AND IM GONNA KEEP YOU FOREVER I LOVE YOU SO MUCH OMG i really hope we keep going strong and we never break up because i seriously cant imagine my life without you youre literally my whole world and everything to me i love you so much baby i really hope you like my gift too hehehe and i hope you can cherish it forever and i hope i can present it to to you nicely too not much time left im very excited a few more years and",
+        "we will be married with alot of cats, lizards and frogs and YEAHHHH STAYING SUPER DUPER HAPPY TIME TOGETHER GOING PLACES AND EARING SO MUCH AND PLAYING ALOT OF GAMES TOGETHER AND WATCHING SO MANY SHOWS AND MOVIES AND JUST BEING WITH YOU I LOVE YOU SO MUCH BABY            ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  | Go to the next page hehe |",
+        "I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU I LOVE YOU"
+    ];
+
+    let currentPage = 0;
+
+    const pageText = document.getElementById("pageText");
+    const pageCounter = document.getElementById("pageCounter");
+    const btnLeft = document.getElementById("btnLeft");
+    const btnRight = document.getElementById("btnRight");
+
+    const turnSound = new Audio("UI/page_turn.ogg");
+
+    function updatePage() {
+        pageText.innerText = pages[currentPage];
+        pageCounter.innerText = `Page ${currentPage + 1} of ${pages.length}`;
+
+        btnLeft.classList.toggle("disabled", currentPage === 0);
+        btnRight.classList.toggle("disabled", currentPage === pages.length - 1);
+
+        pageText.classList.remove("page-flip");
+        void pageText.offsetWidth; // force reflow to restart animation
+        pageText.classList.add("page-flip");
+    }
+
+    function nextPage() {
+        if (currentPage < pages.length - 1) {
+            currentPage++;
+            turnSound.play();
+            updatePage();
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            turnSound.play();
+            updatePage();
+        }
+    }
+
+    updatePage();
+</script>
+
+</body>
+</html>
